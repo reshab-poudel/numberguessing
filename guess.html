@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Number Guessing Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-100 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white rounded-lg shadow-md p-6 max-w-md w-full">
+        <h1 class="text-2xl font-bold text-center mb-4">Number Guessing Game</h1>
+        <p class="text-center mb-6">I'm thinking of a number between 1 and 100</p>
+        <p class="text-sm text-center text-gray-500 mb-6">Built with HTML, CSS (Tailwind), and JavaScript</p>
+        
+        <div class="mb-4">
+            <input type="number" id="guess-input" 
+                   class="w-full border rounded p-2 text-center" 
+                   placeholder="Enter your guess">
+        </div>
+        
+        <button id="guess-btn" 
+                class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded mb-4">
+            Guess!
+        </button>
+        
+        <div id="message" class="text-center mb-4 min-h-[24px]"></div>
+        
+        <div class="text-center">
+            <p>Attempts: <span id="attempts">0</span></p>
+            <button id="new-game" class="mt-4 text-blue-500 underline hidden">New Game</button>
+        </div>
+    </div>
+
+    <script>
+        // Game variables
+        let secretNumber;
+        let attempts;
+        let gameOver;
+        
+        // DOM elements
+        const guessInput = document.getElementById('guess-input');
+        const guessBtn = document.getElementById('guess-btn');
+        const message = document.getElementById('message');
+        const attemptsDisplay = document.getElementById('attempts');
+        const newGameBtn = document.getElementById('new-game');
+        
+        // Initialize game
+        function initGame() {
+            secretNumber = Math.floor(Math.random() * 100) + 1;
+            attempts = 0;
+            gameOver = false;
+            attemptsDisplay.textContent = attempts;
+            message.textContent = '';
+            message.className = 'text-center mb-4 min-h-[24px]';
+            newGameBtn.classList.add('hidden');
+            guessInput.value = '';
+            guessInput.focus();
+        }
+        
+        // Check guess
+        function checkGuess() {
+            if (gameOver) return;
+            
+            const userGuess = parseInt(guessInput.value);
+            
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+                message.textContent = 'Please enter a valid number between 1 and 100';
+                message.className = 'text-center mb-4 min-h-[24px] text-yellow-600';
+                return;
+            }
+            
+            attempts++;
+            attemptsDisplay.textContent = attempts;
+            
+            if (userGuess === secretNumber) {
+                message.textContent = `Correct! You found the number in ${attempts} attempts!`;
+                message.className = 'text-center mb-4 min-h-[24px] text-green-600 font-bold';
+                gameOver = true;
+                newGameBtn.classList.remove('hidden');
+            } else if (userGuess < secretNumber) {
+                message.textContent = 'Too low! Try a higher number.';
+                message.className = 'text-center mb-4 min-h-[24px] text-blue-600';
+            } else {
+                message.textContent = 'Too high! Try a lower number.';
+                message.className = 'text-center mb-4 min-h-[24px] text-red-600';
+            }
+            
+            guessInput.value = '';
+            guessInput.focus();
+        }
+        
+        // Event listeners
+        guessBtn.addEventListener('click', checkGuess);
+        
+        guessInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkGuess();
+            }
+        });
+        
+        newGameBtn.addEventListener('click', initGame);
+        
+        // Start the game
+        initGame();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9664bda1c2622dca',t:'MTc1MzcwOTUyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
